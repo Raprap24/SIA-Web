@@ -1,0 +1,42 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}Dashboard | MovieVerse{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="eyebrow">Your movie universe</div>
+        <h1>{% if request.user.is_authenticated %}Welcome back, {{ request.user.first_name|default:request.user.username }}.{% else %}Stories worth talking about.{% endif %}</h1>
+        <p class="subtitle">Discover something new, share the films you love, and keep your next movie night close at hand.</p>
+        {% if request.user.is_authenticated %}
+        <a class="btn-primary" href="{% url 'add_movie' %}">＋ &nbsp; Add a movie</a>
+        {% else %}
+        <a class="btn-primary" href="{% url 'register' %}">Join MovieVerse</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="stats-grid">
+        <article class="stat-card"><div><div class="stat-label">Movies in the community</div><div class="stat-value">{{ movie_count }}</div></div><span class="stat-icon" aria-hidden="true">▣</span></article>
+        <article class="stat-card"><div><div class="stat-label">Your contributions</div><div class="stat-value">{% if request.user.is_authenticated %}{{ user_movie_count }}{% else %}—{% endif %}</div></div><span class="stat-icon" aria-hidden="true">＋</span></article>
+        <article class="stat-card"><div><div class="stat-label">Genres explored</div><div class="stat-value">{{ genre_count }}</div></div><span class="stat-icon" aria-hidden="true">✦</span></article>
+        <article class="stat-card"><div><div class="stat-label">Community average</div><div class="stat-value">{% if average_rating != None %}{{ average_rating|floatformat:1 }}{% else %}—{% endif %}</div></div><span class="stat-icon" aria-hidden="true">★</span></article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading"><h2>Recently added</h2><a class="section-link" href="{% url 'movie_list' %}">Browse the collection →</a></div>
+    {% include "MovieVerse/_movie_cards.html" with movies=recent_movies empty_title="The collection is just getting started" empty_text="Be the first to share a movie with the community." %}
+</section>
+
+<section class="section">
+    <div class="section-heading"><h2>Community favorites</h2><a class="section-link" href="{% url 'movie_list' %}?sort=rating">See all titles →</a></div>
+    {% include "MovieVerse/_movie_cards.html" with movies=top_movies empty_title="No ratings yet" empty_text="Add the first title and give the community a place to start." %}
+</section>
+
+{% if request.user.is_authenticated %}
+<section class="section">
+    <div class="section-heading"><h2>Your latest additions</h2><a class="section-link" href="{% url 'my_movies' %}">Manage your movies →</a></div>
+    {% include "MovieVerse/_movie_cards.html" with movies=my_movies empty_title="Your collection starts here" empty_text="Share a favorite movie and build your personal collection." %}
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0b0f">
+    <title>{% block title %}MovieVerse{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'Rafael_app/app.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark" aria-hidden="true">▶</span><span>MovieVerse</span></a>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            <p class="nav-caption">Discover</p>
+            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}"><span class="nav-icon" aria-hidden="true">⌂</span>Dashboard</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'movie_list' or request.resolver_match.url_name == 'movie_detail' %}active{% endif %}" href="{% url 'movie_list' %}"><span class="nav-icon" aria-hidden="true">▤</span>Movie list</a>
+            {% if request.user.is_authenticated %}
+            <p class="nav-caption" style="margin-top:22px">Your space</p>
+            <a class="nav-link {% if request.resolver_match.url_name == 'add_movie' %}active{% endif %}" href="{% url 'add_movie' %}"><span class="nav-icon" aria-hidden="true">＋</span>Add a movie</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'my_movies' %}active{% endif %}" href="{% url 'my_movies' %}"><span class="nav-icon" aria-hidden="true">♡</span>My movies</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}"><span class="nav-icon" aria-hidden="true">◉</span>Profile</a>
+            {% endif %}
+            {% if request.user.is_staff %}
+            <p class="nav-caption" style="margin-top:22px">Management</p>
+            <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' or request.resolver_match.url_name == 'admin_users' %}active{% endif %}" href="{% url 'admin_dashboard' %}"><span class="nav-icon" aria-hidden="true">⚙</span>Admin panel</a>
+            {% endif %}
+        </nav>
+        <div class="sidebar-bottom">
+            {% if request.user.is_authenticated %}
+            <div class="user-chip">
+                <span class="avatar" aria-hidden="true">{{ request.user.username|first|upper }}</span>
+                <div style="min-width:0">
+                    <div class="user-chip-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+                    <div class="user-chip-sub">{% if request.user.is_staff %}Administrator{% else %}Movie lover{% endif %}</div>
+                </div>
+            </div>
+            <form class="logout-form" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">↗ &nbsp; Sign out</button>
+            </form>
+            {% else %}
+            <a class="nav-link" href="{% url 'login' %}">Sign in</a>
+            <a class="nav-link" href="{% url 'register' %}">Create account</a>
+            {% endif %}
+        </div>
+    </aside>
+    <main class="main">
+        <div class="main-inner">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}success{% elif message.tags == 'info' %}info{% endif %}" role="status">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

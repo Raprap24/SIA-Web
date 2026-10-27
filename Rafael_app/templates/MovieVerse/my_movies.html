@@ -1,0 +1,9 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}My movies | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading">
+    <div><div class="eyebrow">Your collection</div><h1>My movies</h1><p class="subtitle">Manage the titles you have shared with the community.</p></div>
+    <a class="btn-primary" href="{% url 'add_movie' %}">＋ &nbsp; Add a movie</a>
+</header>
+{% include "MovieVerse/_movie_cards.html" with movies=movies empty_title="You haven't shared a movie yet" empty_text="Start your collection by adding a favorite." %}
+{% endblock %}

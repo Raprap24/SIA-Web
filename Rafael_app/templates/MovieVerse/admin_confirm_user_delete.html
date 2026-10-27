@@ -1,0 +1,10 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}Delete account | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading"><div><div class="eyebrow">Administration</div><h1>Delete account?</h1><p class="subtitle">This action cannot be undone.</p></div></header>
+<section class="form-card">
+    <h2>{{ target_user.username }}</h2>
+    <p class="subtitle">Delete this account and its profile? Movie posts will remain in the collection, but their owner attribution will be removed.</p>
+    <form method="post" class="form-actions">{% csrf_token %}<button class="btn-danger" type="submit">Delete account</button><a class="btn-secondary" href="{% url 'admin_users' %}">Cancel</a></form>
+</section>
+{% endblock %}

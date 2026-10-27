@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0b0f">
+    <title>Create account | MovieVerse</title>
+    <link rel="stylesheet" href="{% static 'Rafael_app/app.css' %}">
+</head>
+<body>
+<main class="auth-page">
+    <section class="auth-brand-panel">
+        <a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark" aria-hidden="true">▶</span><span>MovieVerse</span></a>
+        <div class="auth-pitch">
+            <div class="eyebrow">Your story. Your watchlist.</div>
+            <h1>Make room for more movies.</h1>
+            <p>Join a community of film lovers. Save the movies you want to see and share the ones you can't stop thinking about.</p>
+        </div>
+        <div class="auth-footer">A place for every kind of movie lover.</div>
+    </section>
+    <section class="auth-form-panel">
+        <form class="auth-form" method="post" novalidate>
+            {% csrf_token %}
+            <div class="eyebrow">Join the community</div>
+            <h2>Create your account</h2>
+            <p class="subtitle">It only takes a moment to get started.</p>
+            {% if form.non_field_errors %}<div class="alert" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+            <div class="auth-field">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<span class="help-text">{{ field.help_text|safe }}</span>{% endif %}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary">Create account</button>
+            <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+        </form>
+    </section>
+</main>
+<script>
+    document.querySelectorAll('input[type="password"]').forEach((input) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "text-link";
+        button.textContent = "Show password";
+        button.addEventListener("click", () => {
+            const visible = input.type === "password";
+            input.type = visible ? "text" : "password";
+            button.textContent = visible ? "Hide password" : "Show password";
+        });
+        input.parentElement.append(button);
+    });
+</script>
+</body>
+</html>

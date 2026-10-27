@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0b0f">
+    <title>Sign in | MovieVerse</title>
+    <link rel="stylesheet" href="{% static 'Rafael_app/app.css' %}">
+</head>
+<body>
+<main class="auth-page">
+    <section class="auth-brand-panel">
+        <a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark" aria-hidden="true">▶</span><span>MovieVerse</span></a>
+        <div class="auth-pitch">
+            <div class="eyebrow">A community for movie people</div>
+            <h1>Every great story starts somewhere.</h1>
+            <p>Find your next favorite, keep track of the films you love, and share the ones that stay with you.</p>
+        </div>
+        <div class="auth-footer">Your next movie night starts here.</div>
+    </section>
+    <section class="auth-form-panel">
+        <form class="auth-form" method="post" novalidate>
+            {% csrf_token %}
+            <div class="eyebrow">Welcome back</div>
+            <h2>Sign in to MovieVerse</h2>
+            <p class="subtitle">Pick up where your next great story begins.</p>
+            {% if form.non_field_errors %}<div class="alert" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+                {% if field.name == "remember_me" %}
+                <label class="remember-row">{{ field }} Remember me for 2 weeks</label>
+                {% else %}
+                <div class="auth-field">
+                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            {% endfor %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <button type="submit" class="btn-primary">Sign in</button>
+            <p class="auth-switch">New to MovieVerse? <a href="{% url 'register' %}">Create an account</a></p>
+        </form>
+    </section>
+</main>
+<script>
+    document.querySelectorAll('input[type="password"]').forEach((input) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "text-link";
+        button.textContent = "Show password";
+        button.addEventListener("click", () => {
+            const visible = input.type === "password";
+            input.type = visible ? "text" : "password";
+            button.textContent = visible ? "Hide password" : "Show password";
+        });
+        input.parentElement.append(button);
+    });
+</script>
+</body>
+</html>

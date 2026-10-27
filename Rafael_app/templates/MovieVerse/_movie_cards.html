@@ -1,0 +1,36 @@
+<div class="movie-grid">
+    {% for movie in movies %}
+    <article class="movie-card">
+        <a href="{% url 'movie_detail' movie.pk %}" aria-label="View {{ movie.title_name }}">
+            <div class="poster">
+                {% if movie.poster_url %}
+                <img src="{{ movie.poster_url }}" alt="Poster for {{ movie.title_name }}" loading="lazy">
+                {% else %}
+                <span class="poster-placeholder" aria-hidden="true">▶</span>
+                {% endif %}
+                {% if movie.release_year %}<span class="poster-year">{{ movie.release_year }}</span>{% endif %}
+            </div>
+        </a>
+        <div class="movie-card-body">
+            <h3 class="movie-card-title"><a href="{% url 'movie_detail' movie.pk %}" style="text-decoration:none">{{ movie.title_name }}</a></h3>
+            <div class="movie-meta">
+                <span class="genre-chip">{{ movie.genre|default:"Uncategorized" }}</span>
+                <span class="status-chip">{{ movie.type|default:"Title" }}</span>
+            </div>
+            {% if movie.description %}<p class="subtitle" style="margin-top:9px;font-size:11px">{{ movie.description|truncatechars:92 }}</p>{% endif %}
+            <div class="movie-card-footer">
+                <span class="rating">★ {{ movie.rating|floatformat:1 }}</span>
+                <span class="posted-by">{{ movie.date_added|date:"M j, Y" }}</span>
+            </div>
+            <div class="posted-by" style="margin-top:8px">Shared by {% if movie.owner %}{{ movie.owner.username }}{% else %}a MovieVerse member{% endif %}</div>
+        </div>
+    </article>
+    {% empty %}
+    <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon" aria-hidden="true">▣</div>
+        <h2>{% firstof empty_title "No titles here yet" %}</h2>
+        <p>{% firstof empty_text "Your next favorite might be just around the corner." %}</p>
+        {% if request.user.is_authenticated %}<a class="btn-primary" style="margin-top:15px" href="{% url 'add_movie' %}">Add a movie</a>{% endif %}
+    </div>
+    {% endfor %}
+</div>

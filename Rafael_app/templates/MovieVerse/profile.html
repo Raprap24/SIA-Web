@@ -1,0 +1,34 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}Your profile | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading"><div><div class="eyebrow">Your account</div><h1>Your profile</h1><p class="subtitle">Personalize your MovieVerse profile and keep your details up to date.</p></div></header>
+<section class="profile-header">
+    <span class="avatar profile-avatar">{% if profile_form.instance.avatar_url %}<img src="{{ profile_form.instance.avatar_url }}" alt="Your profile avatar">{% else %}{{ request.user.username|first|upper }}{% endif %}</span>
+    <div><div class="profile-name">{{ request.user.get_full_name|default:request.user.username }}</div><div class="profile-username">@{{ request.user.username }}</div><div class="profile-stat">{{ movie_count }} movie{{ movie_count|pluralize }} shared</div></div>
+</section>
+<form class="form-card" method="post" novalidate>
+    {% csrf_token %}
+    <h2>Account details</h2>
+    <p class="subtitle" style="margin-bottom:20px">Your email is private and only visible to you and administrators.</p>
+    {% if user_form.non_field_errors or profile_form.non_field_errors %}<div class="alert">{{ user_form.non_field_errors }}{{ profile_form.non_field_errors }}</div>{% endif %}
+    <div class="form-grid">
+        {% for field in user_form %}
+        <div class="form-field">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}{{ field.errors }}
+        </div>
+        {% endfor %}
+        {% for field in profile_form %}
+        <div class="form-field {% if field.name == 'bio' %}full{% endif %}">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}{{ field.errors }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="form-actions"><button class="btn-primary" type="submit">Save profile</button><a class="btn-secondary" href="{% url 'password_change' %}">Change password</a></div>
+</form>
+<section class="section">
+    <div class="section-heading"><h2>Your recent posts</h2><a class="section-link" href="{% url 'my_movies' %}">Manage all →</a></div>
+    {% include "MovieVerse/_movie_cards.html" with movies=recent_movies empty_title="No shared movies yet" empty_text="Add your first movie to start your collection." %}
+</section>
+{% endblock %}

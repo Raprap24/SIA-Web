@@ -1,0 +1,36 @@
+[
+  {
+    "model": "Rafael_app.movieverse",
+    "pk": 9001,
+    "fields": {
+      "owner": null,
+      "title_name": "Signal Beyond the Stars",
+      "type": "Movie",
+      "genre": "Science Fiction",
+      "status": "Want to watch",
+      "rating": 8.7,
+      "release_year": 2024,
+      "description": "A quiet signal from deep space brings a divided research crew together to uncover who sent it.",
+      "poster_url": "",
+      "trailer_url": "",
+      "date_added": "2025-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "Rafael_app.movieverse",
+    "pk": 9002,
+    "fields": {
+      "owner": null,
+      "title_name": "The Last Lantern",
+      "type": "Movie",
+      "genre": "Adventure",
+      "status": "Watched",
+      "rating": 8.2,
+      "release_year": 2023,
+      "description": "On an island without electricity, a young cartographer follows a trail of lanterns toward home.",
+      "poster_url": "",
+      "trailer_url": "",
+      "date_added": "2025-02-20T00:00:00Z"
+    }
+  }
+]

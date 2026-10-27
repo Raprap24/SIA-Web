@@ -1,0 +1,26 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}Explore movies | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading">
+    <div><div class="eyebrow">The community collection</div><h1>Explore movies</h1><p class="subtitle">Find something great to watch, shared by movie lovers like you.</p></div>
+    {% if request.user.is_authenticated %}<a class="btn-primary" href="{% url 'add_movie' %}">＋ &nbsp; Add a movie</a>{% else %}<a class="btn-primary" href="{% url 'login' %}">Sign in to post</a>{% endif %}
+</header>
+
+<form class="filter-bar" method="get" action="{% url 'movie_list' %}">
+    <input class="field-control search-field" type="search" name="q" value="{{ query }}" placeholder="Search movie titles..." aria-label="Search movie titles">
+    <select class="form-select" name="genre" aria-label="Filter by genre">
+        <option value="">All genres</option>
+        {% for genre in genres %}<option value="{{ genre }}" {% if selected_genre == genre %}selected{% endif %}>{{ genre }}</option>{% endfor %}
+    </select>
+    <input class="field-control" type="number" name="year" value="{{ selected_year }}" min="1888" max="2100" placeholder="Release year" aria-label="Filter by release year">
+    <select class="form-select" name="sort" aria-label="Sort movies">
+        <option value="newest" {% if sort == "newest" %}selected{% endif %}>Newest</option>
+        <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>Oldest</option>
+        <option value="title" {% if sort == "title" %}selected{% endif %}>Title A–Z</option>
+        <option value="rating" {% if sort == "rating" %}selected{% endif %}>Highest rated</option>
+    </select>
+    <button class="btn-primary" type="submit">Filter</button>
+</form>
+
+{% include "MovieVerse/_movie_cards.html" with movies=movies empty_title="No movies match your search" empty_text="Try another title or clear a filter to see more." %}
+{% endblock %}

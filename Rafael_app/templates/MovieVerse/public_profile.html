@@ -1,0 +1,17 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}{{ profile_user.username }} | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading"><div><div class="eyebrow">Community profile</div><h1>{{ profile_user.username }}</h1><p class="subtitle">A little about this MovieVerse member.</p></div></header>
+<section class="profile-header">
+    <span class="avatar profile-avatar">{% if profile_obj.avatar_url %}<img src="{{ profile_obj.avatar_url }}" alt="{{ profile_user.username }} avatar">{% else %}{{ profile_user.username|first|upper }}{% endif %}</span>
+    <div><div class="profile-name">{{ profile_user.get_full_name|default:profile_user.username }}</div><div class="profile-username">@{{ profile_user.username }}</div><div class="profile-stat">{{ movie_count }} movie{{ movie_count|pluralize }} shared · Member since {{ profile_user.date_joined|date:"M Y" }}</div></div>
+</section>
+<section class="panel">
+    {% if profile_obj.bio %}<p class="detail-description" style="margin:0">{{ profile_obj.bio }}</p>{% else %}<p class="subtitle">This member hasn't added a bio yet.</p>{% endif %}
+    {% if show_email %}<p class="subtitle" style="margin:12px 0 0">Email: {{ profile_user.email|default:"Not provided" }}</p>{% endif %}
+</section>
+<section class="section">
+    <div class="section-heading"><h2>Movies shared by {{ profile_user.username }}</h2></div>
+    {% include "MovieVerse/_movie_cards.html" with movies=recent_movies empty_title="No movie posts yet" empty_text="When this member shares movies, they will appear here." %}
+</section>
+{% endblock %}

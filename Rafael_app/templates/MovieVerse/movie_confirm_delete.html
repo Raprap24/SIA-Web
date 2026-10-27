@@ -1,0 +1,14 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}Delete {{ movie.title_name }} | MovieVerse{% endblock %}
+{% block content %}
+<header class="page-heading"><div><div class="eyebrow">Confirm action</div><h1>Remove this title?</h1><p class="subtitle">This will permanently remove it from the community collection.</p></div></header>
+<section class="form-card">
+    <h2>{{ movie.title_name }}</h2>
+    <p class="subtitle">This action cannot be undone.</p>
+    <form method="post" class="form-actions">
+        {% csrf_token %}
+        <button class="btn-danger" type="submit">Delete movie</button>
+        <a class="btn-secondary" href="{% url 'movie_detail' movie.pk %}">Keep movie</a>
+    </form>
+</section>
+{% endblock %}

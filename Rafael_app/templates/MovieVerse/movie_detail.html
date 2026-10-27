@@ -1,0 +1,28 @@
+{% extends "MovieVerse/base.html" %}
+{% block title %}{{ movie.title_name }} | MovieVerse{% endblock %}
+{% block content %}
+<div class="eyebrow"><a class="section-link" href="{% url 'movie_list' %}">← Back to movies</a></div>
+<section class="detail-layout">
+    <div class="detail-poster">
+        {% if movie.poster_url %}<img src="{{ movie.poster_url }}" alt="Poster for {{ movie.title_name }}">
+        {% else %}<div class="poster" style="height:100%;aspect-ratio:auto"><span class="poster-placeholder" aria-hidden="true">▶</span></div>{% endif %}
+    </div>
+    <div class="detail-info">
+        <div class="eyebrow">{{ movie.type|default:"Movie" }}{% if movie.release_year %} · {{ movie.release_year }}{% endif %}</div>
+        <h1>{{ movie.title_name }}</h1>
+        <div class="movie-meta"><span class="genre-chip">{{ movie.genre|default:"Uncategorized" }}</span><span class="status-chip">{{ movie.status|default:"No status" }}</span><span class="rating">★ {{ movie.rating|floatformat:1 }} / 10</span></div>
+        <div class="metadata-list">
+            <div><span class="metadata-label">Shared by</span><span class="metadata-value">{% if movie.owner %}<a href="{% url 'public_profile' movie.owner.username %}" class="text-link">{{ movie.owner.username }}</a>{% else %}MovieVerse member{% endif %}</span></div>
+            <div><span class="metadata-label">Added</span><span class="metadata-value">{{ movie.date_added|date:"M j, Y" }}</span></div>
+        </div>
+        {% if movie.description %}<p class="detail-description">{{ movie.description }}</p>{% else %}<p class="detail-description" style="color:var(--muted)">No description has been added yet.</p>{% endif %}
+        <div class="detail-actions">
+            {% if movie.trailer_url %}<a class="btn-secondary" href="{{ movie.trailer_url }}" target="_blank" rel="noopener noreferrer">▶ &nbsp; Watch trailer</a>{% endif %}
+            {% if request.user.is_authenticated and movie.owner_id == request.user.id or request.user.is_staff %}
+            <a class="btn-secondary" href="{% url 'edit_movie' movie.pk %}">Edit title</a>
+            <a class="btn-danger" href="{% url 'delete_movie' movie.pk %}">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
